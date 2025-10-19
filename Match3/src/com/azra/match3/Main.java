@@ -14,7 +14,7 @@ public class Main {
 
         while (running){
             grid.printGrid();
-            System.out.println("W/A/S/D ile hareket et, Q ile çıkış yap:");
+            System.out.println("W/A/S/D ile hareket et, Q ile çıkış yap, E ile taşını seç:");
             String input = scanner.nextLine().toUpperCase();
 
 
@@ -28,6 +28,8 @@ public class Main {
                 case "D":
                     grid.moveRight(); break;
                 case "Q": running = false; break;
+                case "E":
+                    grid.select();break;
             }
             System.out.println();
         }

@@ -7,6 +7,9 @@ public class Grid {
     private int cursorX = 0;
     private int cursorY = 0;
 
+    private int selectedX = -1;
+    private int selectedY = -1; //kullanıcıının seçtiği tuşu tutcak
+
     private char [][] cells;
     //iki boyutlu char dizisi tutuyo
     private int rows;
@@ -62,7 +65,11 @@ public class Grid {
         for(int i = 0; i < rows; i++){
             for(int j = 0; j < cols; j++){
 
-                if(i == cursorY && j == cursorX){
+                if(i == selectedY && j == selectedX){
+                    System.out.print("{" + cells[i][j] + "}");
+                }
+
+                else if (i == cursorY && j == cursorX) {
                     System.out.print("[" + cells[i][j] + "]");
                 }
                 else {
@@ -71,6 +78,37 @@ public class Grid {
             }
             System.out.println();
         }
+    }
+
+    public void select(){
+
+        if(selectedX == -1){
+            selectedX = cursorX; //artık -1 değil
+            selectedY = cursorY;
+            System.out.println("Seçili taş konumu: " + "(" + cursorX + ") " + "(" + cursorY + ")" );
+
+        }
+        else {
+            int xDiff = Math.abs(cursorX - selectedX);
+            int yDiff = Math.abs(cursorY - selectedY);
+
+            if (xDiff + yDiff == 1){
+                System.out.println("Komşu taş seçildi. Değişim yapılıyor...");
+
+                char temp = cells[selectedY][selectedX];
+                cells[selectedY][selectedX] = cells[cursorY][cursorX];
+                cells[cursorY][cursorX] = temp;
+            }
+
+            else {
+                System.out.println("Komşu değiller! Seçim iptal edildi");
+            }
+
+            selectedX = -1;
+            selectedY = -1;
+        }
+
+
     }
 
 
