@@ -30,6 +30,7 @@ public class Main {
                 case "Q": running = false; break;
                 case "E":
                     grid.select();break;
+
             }
             System.out.println();
         }

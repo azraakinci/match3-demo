@@ -22,10 +22,29 @@ public class Grid {
         this.cols = cols;
         cells = new char[rows][cols];
         //başlangıçta tüm hücreleri boş istenen grid oluşuyor
+
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < cols; j++) {
-                int rastgeleSayi = rand.nextInt(tasTurSayisi);
-                cells[i][j] = (char)('A' + rastgeleSayi);
+                char newStone;
+                boolean isMatch;
+
+                do {
+                    int randomNumber = rand.nextInt(tasTurSayisi);
+                    newStone = (char) ('A' + randomNumber);
+                    isMatch = false; //varsayılan olarak ayarlayalım
+
+                    if(j >= 2 && cells[i][j-1] == newStone && cells[i][j-2] == newStone){
+                        isMatch = true; //2.sütundan büyük müyüz diye bakıcaz değilsek zaten bi önceki 2 sütunumuzla eşleşmiyoruz demektir yatayda
+
+                    }
+
+                    if(i >= 2 && cells[i - 1][j] == newStone && cells[i - 2][j] == newStone){
+                        isMatch = true;
+                    }
+
+                }while(isMatch);
+                cells[i][j] = newStone;
+
             }
         }
     }
@@ -72,6 +91,10 @@ public class Grid {
                 else if (i == cursorY && j == cursorX) {
                     System.out.print("[" + cells[i][j] + "]");
                 }
+
+                else if (cells[i][j] == ' ') {
+                    System.out.print(" . ");
+                }
                 else {
                     System.out.print(" " + cells[i][j] + " ");
                 }
@@ -98,6 +121,7 @@ public class Grid {
                 char temp = cells[selectedY][selectedX];
                 cells[selectedY][selectedX] = cells[cursorY][cursorX];
                 cells[cursorY][cursorX] = temp;
+                checkMatches();
             }
 
             else {
@@ -107,9 +131,34 @@ public class Grid {
             selectedX = -1;
             selectedY = -1;
         }
-
-
     }
 
+    public void checkMatches(){
+        System.out.println("Eşleşmeler kontrol ediliyor...");
+        for(int i = 0; i < rows ; i++){
+            for(int j = 0; j < cols - 2; j++){
+                char stone = cells[i][j];
+                if(stone != ' ' && stone == cells[i][j+1] && stone == cells[i][j+2]){
+                    System.out.println("Yatay eşleşme bulundu!");
+                    cells[i][j] = ' ';
+                    cells[i][j + 1] = ' ';
+                    cells[i][j + 2] = ' ';
+                }
+            }
+        }
+
+        for(int c = 0; c < cols ; c++){
+            for(int r = 0; r < rows - 2 ; r++){
+                char stone = cells[r][c];
+
+                if(stone != ' ' && stone == cells[r + 1][c] && stone == cells[r + 2][c]){
+                    System.out.println("Dikey eşleşme bulundu!");
+                    cells[r][c] = ' ';
+                    cells[r + 1][c] = ' ';
+                    cells[r + 2][c] = ' ';
+                }
+            }
+        }
+    }
 
 }
