@@ -8,9 +8,7 @@ public class Main {
         Scanner scanner = new Scanner(System.in);
 
         Grid grid = new Grid(5,5);
-        Player player = new Player(2,2,'X');
 
-        grid.setCell(player.getRow(), player.getCol(), player.getSymbol());
 
         boolean running = true;
 
@@ -19,20 +17,18 @@ public class Main {
             System.out.println("W/A/S/D ile hareket et, Q ile çıkış yap:");
             String input = scanner.nextLine().toUpperCase();
 
-            grid.setCell(player.getRow(), player.getCol(), '.');
 
             switch (input){
                 case "W":
-                    player.moveUp();break;
+                    grid.moveUp();break;
                 case "S":
-                    player.moveDown(5); break;
+                    grid.moveDown(); break;
                 case "A":
-                    player.moveLeft(); break;
+                    grid.moveLeft(); break;
                 case "D":
-                    player.moveRight(5); break;
+                    grid.moveRight(); break;
                 case "Q": running = false; break;
             }
-            grid.setCell(player.getRow(), player.getCol(), player.getSymbol());
             System.out.println();
         }
         scanner.close();
