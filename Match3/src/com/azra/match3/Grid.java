@@ -115,15 +115,33 @@ public class Grid {
             int xDiff = Math.abs(cursorX - selectedX);
             int yDiff = Math.abs(cursorY - selectedY);
 
-            if (xDiff + yDiff == 1){
+            if (xDiff + yDiff == 1) {
                 System.out.println("Komşu taş seçildi. Değişim yapılıyor...");
 
                 char temp = cells[selectedY][selectedX];
                 cells[selectedY][selectedX] = cells[cursorY][cursorX];
                 cells[cursorY][cursorX] = temp;
-                checkMatches();
-            }
 
+                while (checkMatches()) {
+                    printGrid();
+                    try {
+                        Thread.sleep(2000);
+                        //yarım saniye bekletiyoz
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    applyGravity();
+                    refillBoard();
+                    printGrid();
+                    //alttaki yapı yazdırılmış kodu yarım saniye bekletmeye yarıyo
+                    try {
+                        Thread.sleep(2000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+            }
             else {
                 System.out.println("Komşu değiller! Seçim iptal edildi");
             }
@@ -133,8 +151,10 @@ public class Grid {
         }
     }
 
-    public void checkMatches(){
+    public boolean checkMatches(){
         System.out.println("Eşleşmeler kontrol ediliyor...");
+        boolean eslesmeDurumu = false;
+
         for(int i = 0; i < rows ; i++){
             for(int j = 0; j < cols - 2; j++){
                 char stone = cells[i][j];
@@ -143,6 +163,7 @@ public class Grid {
                     cells[i][j] = ' ';
                     cells[i][j + 1] = ' ';
                     cells[i][j + 2] = ' ';
+                    eslesmeDurumu = true;
                 }
             }
         }
@@ -156,9 +177,53 @@ public class Grid {
                     cells[r][c] = ' ';
                     cells[r + 1][c] = ' ';
                     cells[r + 2][c] = ' ';
+                    eslesmeDurumu = true;
+                }
+            }
+        }
+        return eslesmeDurumu;
+    }
+
+    public void applyGravity(){
+        System.out.println("Boşluklar dolduruluyor...");
+
+        for(int c = 0; c < cols; c++){
+
+            int firstEmptyRow = -1;
+
+            for(int r = rows - 1; r >= 0; r--){
+
+                char stone = cells[r][c];
+
+                if(stone == ' ' || stone == '.'){
+                   if(firstEmptyRow == -1){
+                       firstEmptyRow = r;
+                   }
+                }
+                else if (firstEmptyRow != -1){//burada kayıtlı taş var bi üstte de normal tas
+                    cells[firstEmptyRow][c] = stone; //boş olmayan ilk taşı bulduğumuzda düşürdük
+                    cells[r][c]= ' ';
+                    firstEmptyRow--;
+
                 }
             }
         }
     }
+
+    public void refillBoard(){
+        System.out.println("Tahta yeniden dolduruluyo");
+        for(int r = 0; r < rows; r++){
+            for (int c = 0; c < cols; c++){
+
+                if(cells[r][c] == ' ' || cells[r][c] == '.'){
+                    int randomStone = rand.nextInt(this.tasTurSayisi);
+                    cells[r][c] = (char)('A' + randomStone);
+                }
+            }
+        }
+    }
+
+
+
 
 }
