@@ -12,11 +12,10 @@ public class Main {
 
         boolean running = true;
 
-        while (running){
+        while (running && !grid.isGameOver()){
             grid.printGrid();
             System.out.println("W/A/S/D ile hareket et, Q ile çıkış yap, E ile taşını seç:");
             String input = scanner.nextLine().toUpperCase();
-
 
             switch (input){
                 case "W":
@@ -33,6 +32,7 @@ public class Main {
 
             }
             System.out.println();
+
         }
         scanner.close();
         System.out.println("Oyun bitti!");

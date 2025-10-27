@@ -4,8 +4,12 @@ import java.util.Random;
 
 public class Grid {
 
+    private int score = 0;
+    private boolean isGameOver = false;
+
     private int cursorX = 0;
     private int cursorY = 0;
+
 
     private int selectedX = -1;
     private int selectedY = -1; //kullanıcıının seçtiği tuşu tutcak
@@ -55,6 +59,14 @@ public class Grid {
         //istenen hücreyi döndürür
     }
 
+    public int getScore(){
+        return score;
+    }
+
+    public boolean isGameOver() {
+        return isGameOver;
+    }
+
     public void moveUp() {
         if (cursorY > 0) {
             cursorY--;
@@ -81,6 +93,11 @@ public class Grid {
 
 
     public void printGrid(){
+
+        System.out.println("====================");
+        System.out.println(" SKOR: " + this.score);
+        System.out.println("====================");
+
         for(int i = 0; i < rows; i++){
             for(int j = 0; j < cols; j++){
 
@@ -123,6 +140,7 @@ public class Grid {
                 cells[cursorY][cursorX] = temp;
 
                 while (checkMatches()) {
+
                     printGrid();
                     try {
                         Thread.sleep(2000);
@@ -130,6 +148,7 @@ public class Grid {
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
+
                     applyGravity();
                     refillBoard();
                     printGrid();
@@ -140,7 +159,10 @@ public class Grid {
                         e.printStackTrace();
                     }
                 }
-
+                if (score >= 100) {
+                    System.out.println("Skorunuz: " + score + " Oyunu kazandınız!");
+                    this.isGameOver = true; // Oyunu "bitti" olarak işaretle.
+                }
             }
             else {
                 System.out.println("Komşu değiller! Seçim iptal edildi");
@@ -164,6 +186,7 @@ public class Grid {
                     cells[i][j + 1] = ' ';
                     cells[i][j + 2] = ' ';
                     eslesmeDurumu = true;
+                    score += 10;
                 }
             }
         }
@@ -178,6 +201,7 @@ public class Grid {
                     cells[r + 1][c] = ' ';
                     cells[r + 2][c] = ' ';
                     eslesmeDurumu = true;
+                    score += 10;
                 }
             }
         }
